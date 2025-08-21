@@ -1,14 +1,14 @@
 import Button from "./Button"
 import Dialog from "./Dialog";
 import InputBox from "./InputBox"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 
 const CreateNewProject = ({ onCancel, onSave }) => {
     const titleRef = useRef();
     const descRef = useRef();
     const dateRef = useRef();
     const dialogRef = useRef();
-    return <section className="w-full p-20 pr-60">
+    return <section className="w-full p-20 pr-60 my-20">
         <div className="flex flex-row justify-end gap-1">
             <Button btntype="secondary" onClick={onCancel}>Cancel</Button>
             <Button onClick={() => {
@@ -17,6 +17,7 @@ const CreateNewProject = ({ onCancel, onSave }) => {
                         title: titleRef.current.value,
                         desc: descRef.current.value,
                         date: dateRef.current.value,
+                        taskList: [],
                     }
                     return onSave(project)
                 } else {

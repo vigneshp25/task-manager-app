@@ -26,6 +26,37 @@ function App() {
     setShowCreateProjectPage(false);
     setActiveProjectIndex(index);
   }
+  function handleDeleteProject(index) {
+    setProjectList((pre) => pre.filter((currentItem, currentIndex) => currentIndex !== index));
+    setshowProjectDetailsPage(false);
+  }
+  function handleAddTask(projectIndex, taskText) {
+
+    setProjectList((previousProjectList) => {
+      return previousProjectList.map((currentProject, currentProjectIndex) => {
+        if (currentProjectIndex === projectIndex) {
+          return {
+            ...currentProject,
+            taskList: [...currentProject.taskList, taskText],
+          };
+        }
+        return currentProject;
+      })
+    })
+  }
+  function handleDeleteTask(projectIndex, taskIndex) {
+    setProjectList((previousProjectList) => {
+      return previousProjectList.map((currentProject,currentProjectIndex)=>{
+        if (currentProjectIndex === projectIndex) {
+          return{
+            ...currentProject,
+            taskList: currentProject.taskList.filter((item,currentTaskIndex) => currentTaskIndex!==taskIndex ),
+          }
+        }
+        return currentProject;
+      })
+    })
+  }
 
   return (
     <section className="grid grid-rows-1 grid-cols-10 h-dvh">
@@ -38,10 +69,10 @@ function App() {
           })}
         </ul>
       </aside>
-      <section className="col-span-8 flex flex-col items-center my-30">
+      <section className="col-span-8 flex flex-col items-center my-10">
         {!showCreateProjectPage && !showProjectDetailsPage && <Intro OnCreate={handleCreateNewProject} />}
         {showCreateProjectPage && <CreateNewProject onCancel={handleCancel} onSave={handleSave} />}
-        {showProjectDetailsPage && <ProjectDetailsPage {...projectList[activeProjectIndex]}/>}
+        {showProjectDetailsPage && <ProjectDetailsPage {...projectList[activeProjectIndex]} index={activeProjectIndex} onDelete={handleDeleteProject} onTaskAdd={handleAddTask} onTaskDelete={handleDeleteTask} />}
       </section>
     </section>
   )
