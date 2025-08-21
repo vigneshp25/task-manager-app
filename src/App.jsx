@@ -8,9 +8,11 @@ function App() {
   const [projectList, setProjectList] = useState([]);
   const [showCreateProjectPage, setShowCreateProjectPage] = useState(false);
   const [showProjectDetailsPage, setshowProjectDetailsPage] = useState(false);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(null);
 
   function handleCreateNewProject() {
     setShowCreateProjectPage(true);
+    setshowProjectDetailsPage(false);
   }
   function handleCancel() {
     setShowCreateProjectPage(false);
@@ -19,8 +21,10 @@ function App() {
     setProjectList((pre) => [...pre, project]);
     setShowCreateProjectPage(false);
   }
-  function handleProjectDetails (title, desc, date){
-
+  function handleProjectDetails(index) {
+    setshowProjectDetailsPage(true);
+    setShowCreateProjectPage(false);
+    setActiveProjectIndex(index);
   }
 
   return (
@@ -29,15 +33,15 @@ function App() {
         <h3 className="text-2xl font-bold uppercase pt-20 pb-10 text-stone-300">Your Projects</h3>
         <Button onClick={handleCreateNewProject}>+ Add Project</Button>
         <ul className="text-stone-300 py-10">
-          {projectList.map(({ title, desc, date }, index) => {
-            return <li key={index} className="p-2 rounded hover:bg-stone-950 cursor-pointer" onClick={() => handleProjectDetails(title, desc, date)}>{title}</li>;
+          {projectList.map(({ title }, index) => {
+            return <li key={index} className="p-2 rounded hover:bg-stone-950 cursor-pointer" onClick={() => handleProjectDetails(index)}>{title}</li>;
           })}
         </ul>
       </aside>
       <section className="col-span-8 flex flex-col items-center my-30">
-        {!showCreateProjectPage && <Intro OnCreate={handleCreateNewProject} />}
+        {!showCreateProjectPage && !showProjectDetailsPage && <Intro OnCreate={handleCreateNewProject} />}
         {showCreateProjectPage && <CreateNewProject onCancel={handleCancel} onSave={handleSave} />}
-        {showProjectDetailsPage && <ProjectDetailsPage />}
+        {showProjectDetailsPage && <ProjectDetailsPage {...projectList[activeProjectIndex]}/>}
       </section>
     </section>
   )
